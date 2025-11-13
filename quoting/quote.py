@@ -5,7 +5,7 @@ import json
 import struct
 
 # Config
-SYMBOL = 'BTC/USDT'
+SYMBOL = 'XRP/USDT'
 HOST = '127.0.0.1'
 PORT = 5000
 URL = f"tcp://{HOST}:{PORT}"
@@ -20,7 +20,7 @@ sock = pynng.Pub0()
 sock.listen(URL)
 sock.send_timeout = 100
 
-print("Binance BTC/USDT Live Price Tracker")
+print(f"Binance {SYMBOL} Live Price Tracker")
 print("-" * 50)
 print(f"Publishing {SYMBOL} to {HOST}:{PORT}")
 
@@ -35,9 +35,9 @@ while True:
             'timestamp': time.time()
         }
         # Send as compact binary (faster than JSON)
-        msg = struct.pack('!ddd', data['bid'], data['ask'], data['last'])
+        msg = struct.pack('!dd16s', data['bid'], data['ask'], data['symbol'].encode().ljust(16, b'\0'))
         sock.send(msg)
-        print(f"Sent: bid={data['bid']:.2f} ask={data['ask']:.2f}")
+        print(f"Sent: bid={data['bid']:.2f} ask={data['ask']:.2f} symbol={data['symbol']}")
     except Exception as e:
         print("Error:", e)
     

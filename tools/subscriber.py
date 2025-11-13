@@ -19,9 +19,10 @@ if __name__ == '__main__':
     while True:
         try:
             msg = sub.recv()
-            bid, ask, last = struct.unpack('!ddd', msg)
+            bid, ask, symbol_bytes = struct.unpack('!dd16s', msg)
+            symbol = symbol_bytes.decode().rstrip('\0')
             ts = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-            print(f"[{ts}] bid={bid:.2f} ask={ask:.2f} last={last:.2f}")
+            print(f"[{ts}] {symbol}: bid={bid:.2f} ask={ask:.2f}")
         except KeyboardInterrupt:
             print("\nStopped.")
             break

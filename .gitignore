@@ -1,2 +1,5 @@
 # Virtual environments
 venv/
+
+# Environment variables - API KEYS
+/trading/.env
