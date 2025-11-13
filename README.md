@@ -12,6 +12,21 @@ Setup
   pip install -r requirements.txt
   ```
 
+Trading Daemon
+---------
+- File: `trading/trade.py`
+- Sample order test to binance test vision api.
+- Before running:
+
+Go to https://testnet.binance.vision/
+Login
+Copy API keys to /trading/.env
+
+- Run:
+  ```
+  python3 quoting/quote.py
+  ```
+
 Quoting Daemon
 ---------
 - File: `quoting/quote.py`
