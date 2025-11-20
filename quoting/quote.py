@@ -1,5 +1,5 @@
 import ccxt
-import pynng
+import zmq
 import time
 import json
 import struct
@@ -15,10 +15,11 @@ exchange = ccxt.binance({
     'enableRateLimit': True,  # Be nice to the API
 })
 
-# nng pub socket
-sock = pynng.Pub0()
-sock.listen(URL)
-sock.send_timeout = 100
+# zmq pub socket
+context = zmq.Context()
+sock = context.socket(zmq.PUB)
+sock.bind(URL)
+sock.setsockopt(zmq.SNDTIMEO, 100)
 
 print(f"Binance {SYMBOL} Live Price Tracker")
 print("-" * 50)
@@ -36,7 +37,7 @@ while True:
         }
         # Send as compact binary (faster than JSON)
         msg = struct.pack('!dd16s', data['bid'], data['ask'], data['symbol'].encode().ljust(16, b'\0'))
-        sock.send(msg)
+        sock.send(msg, zmq.NOBLOCK)
         print(f"Sent: bid={data['bid']:.2f} ask={data['ask']:.2f} symbol={data['symbol']}")
     except Exception as e:
         print("Error:", e)

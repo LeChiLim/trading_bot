@@ -1,7 +1,7 @@
 import struct
 import time
 
-import pynng
+import zmq
 
 # Configuration should match the publisher
 HOST = '127.0.0.1'
@@ -9,9 +9,10 @@ PORT = 5000
 URL = f"tcp://{HOST}:{PORT}"
 
 if __name__ == '__main__':
-    sub = pynng.Sub0()
-    sub.dial(URL)
-    sub.subscribe(b'')  # subscribe to everything
+    context = zmq.Context()
+    sub = context.socket(zmq.SUB)
+    sub.connect(URL)
+    sub.setsockopt(zmq.SUBSCRIBE, b'')  # subscribe to everything
 
     print("Listening for quotes...")
     print("-" * 40)
