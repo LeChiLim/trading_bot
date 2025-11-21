@@ -36,6 +36,24 @@ Quoting Daemon
   python3 quoting/quote.py
   ```
 
+Strategy: Dual EMA
+------------------
+- File: `strategies/strategy_dual_ema.py`
+- Listens to bid/ask quotes, maintains two EMAs (e.g. 9/25), and sends trade signals to the trading daemon via ZMQ.
+- Edit the `SYMBOL`, `EMA_FAST`, and `EMA_SLOW` parameters at the top of the script as needed.
+
+How it Works:
+  - Receives bid/ask/symbol binary quotes on `tcp://127.0.0.1:5000`.
+  - Computes two EMAs (fast and slow) to detect crossovers.
+  - When the fast EMA crosses above the slow EMA, sends a BUY order to the trading daemon; when it crosses below, sends a SELL order.
+  - Sends JSON order messages via ZMQ PUSH to `tcp://127.0.0.1:5001`.
+
+To run:
+  ```
+  python3 strategies/strategy_dual_ema.py
+  ```
+
+
 Subscriber
 ----------
 - File: `tools/subscriber.py`
