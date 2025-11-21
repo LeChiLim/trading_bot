@@ -38,7 +38,7 @@ while True:
         # Send as compact binary (faster than JSON)
         msg = struct.pack('!dd16s', data['bid'], data['ask'], data['symbol'].encode().ljust(16, b'\0'))
         sock.send(msg, zmq.NOBLOCK)
-        print(f"Sent: bid={data['bid']:.2f} ask={data['ask']:.2f} symbol={data['symbol']}")
+        print(f"Sent: bid={data['bid']:.6f} ask={data['ask']:.6f} symbol={data['symbol']}")
     except Exception as e:
         print("Error:", e)
     
