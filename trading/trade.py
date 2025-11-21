@@ -21,11 +21,27 @@ MAX_QUEUE_SIZE = 1000  # Maximum orders in queue
 # ==================
 
 # Binance with API keys
+# exchange = ccxt.binance({
+#     'apiKey': API_KEY,
+#     'secret': API_SECRET,
+#     'enableRateLimit': True,
+#     'options': {'defaultType': 'spot'}
+# })
+
 exchange = ccxt.binance({
     'apiKey': API_KEY,
     'secret': API_SECRET,
     'enableRateLimit': True,
-    'options': {'defaultType': 'spot'}
+    'urls': {
+        'api': {
+            'public': 'https://testnet.binance.vision/api',
+            'private': 'https://testnet.binance.vision/api',
+        }
+    },
+    'options': {
+        'defaultType': 'spot',
+    },
+    'timeout': 30000,
 })
 
 exchange.set_sandbox_mode(True)
