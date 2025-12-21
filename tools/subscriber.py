@@ -4,8 +4,8 @@ import time
 import zmq
 
 # Configuration should match the publisher
-HOST = '127.0.0.1'
-PORT = 5000
+HOST = 'localhost'
+PORT = 5557
 URL = f"tcp://{HOST}:{PORT}"
 
 if __name__ == '__main__':
@@ -20,7 +20,7 @@ if __name__ == '__main__':
     while True:
         try:
             msg = sub.recv()
-            bid, ask, symbol_bytes = struct.unpack('!dd16s', msg)
+            bid, ask, ts, symbol_bytes = struct.unpack('!ddd16s', msg)
             symbol = symbol_bytes.decode().rstrip('\0')
             ts = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
             print(f"[{ts}] {symbol}: bid={bid:.2f} ask={ask:.2f}")
