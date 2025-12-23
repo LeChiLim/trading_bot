@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--host', type=str, default=HOST, help='Host to connect to')     
     parser.add_argument('--port', type=int, default=PORT, help='Port to connect to')   
-    parser.add_argument('--backtest', type=bool, default=False,
+    parser.add_argument('--backtest', action='store_true',
                     help='Set to True if connecting to backtester data feed.')
 
     args = parser.parse_args()
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     sub.connect(URL)
     sub.setsockopt(zmq.SUBSCRIBE, b'')  # subscribe to everything
 
-    print("Listening for quotes...")
+    print("Listening for quotes... on ", URL)
     print("-" * 40)
 
     while True:
