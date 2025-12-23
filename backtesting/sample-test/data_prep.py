@@ -69,7 +69,7 @@ try:
         )
         pub_socket.send(msg)
         # Optional: slow down so it looks like a live feed
-        time.sleep(1)
+        #time.sleep(0.01)
 
         # Optional: print occasionally
         # print(f"{idx}  bid={bid:.2f} ask={ask:.2f}")
@@ -81,3 +81,5 @@ except KeyboardInterrupt:
 
 pub_socket.close()
 context.term()
+
+print("Data replay finished.")
