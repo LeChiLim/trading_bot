@@ -1,14 +1,29 @@
 import struct
 import time
-
+import argparse
 import zmq
 
 # Configuration should match the publisher
 HOST = 'localhost'
-PORT = 5557
-URL = f"tcp://{HOST}:{PORT}"
+PORT = 5001
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+                    prog='Subscriber Tool',
+                    description='Subscribe to any zmq host and port.')
+
+    parser.add_argument('--host', type=str, default=HOST, help='Host to connect to')     
+    parser.add_argument('--port', type=int, default=PORT, help='Port to connect to')   
+    parser.add_argument('--backtest', type=bool, default=False,
+                    help='Set to True if connecting to backtester data feed.')
+
+    args = parser.parse_args()
+
+    if args.backtest == True:
+        PORT = 5557  # Backtester data feed port
+
+    URL = f"tcp://{HOST}:{PORT}"
+
     context = zmq.Context()
     sub = context.socket(zmq.SUB)
     sub.connect(URL)
