@@ -1,7 +1,9 @@
-Trading Bot Utilities
+Le Chi's Trading Bot
 =====================
 
-This workspace contains small tools for quoting Binance spot prices via `pynng`.
+This is a crypto trading bot that aims to replicate a production level trading system. There are 2 sections to this system.
+- Live Trading 
+- Back Testing
 
 Setup
 -----
@@ -12,7 +14,10 @@ Setup
   pip install -r requirements.txt
   ```
 
-Trading Daemon
+LIVE TRADING COMPONENTS:
+Live trading consists of the trading service, quoting service and the strategy engine. 
+
+Trading Service
 ---------
 - File: `trading/trade.py`
 - Sample order test to binance test vision api.
@@ -27,7 +32,7 @@ Copy API keys to /trading/.env
   python3 quoting/quote.py
   ```
 
-Quoting Daemon
+Quoting Service
 ---------
 - File: `quoting/quote.py`
 - Broadcasts BTC/USDT bid/ask/last over `tcp://127.0.0.1:5000`.
@@ -53,6 +58,15 @@ To run:
   python3 strategies/strategy_dual_ema.py
   ```
 
+
+BACKTESTING:
+To effectively backtest the strategy, we must use the same strategy component during backtest to better understand its behaviour. We use backtesting/ folder components. We use data_prep.py to send old market information in data just like how quoting.py would. We will use backtester_core to collect the trades that are executed, similar to trade.py. 
+
+Run strategy_XYZ.py with argument --backtest to ensure that quoting and trading ports are modified accordingly.
+
+
+
+ADDITIONAL TOOLS BUILT:
 
 Subscriber
 ----------
