@@ -15,6 +15,7 @@ Setup
   ```
 
 LIVE TRADING COMPONENTS:
+-----
 Live trading consists of the trading service, quoting service and the strategy engine. 
 
 Trading Service
@@ -60,6 +61,7 @@ To run:
 
 
 BACKTESTING:
+-----
 To effectively backtest the strategy, we must use the same strategy component during backtest to better understand its behaviour. We use backtesting/ folder components. We use data_prep.py to send old market information in data just like how quoting.py would. We will use backtester_core to collect the trades that are executed, similar to trade.py. 
 
 Run strategy_XYZ.py with argument --backtest to ensure that quoting and trading ports are modified accordingly.
@@ -67,6 +69,7 @@ Run strategy_XYZ.py with argument --backtest to ensure that quoting and trading 
 
 
 ADDITIONAL TOOLS BUILT:
+-----
 
 Subscriber
 ----------
