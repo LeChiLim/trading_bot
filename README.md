@@ -66,6 +66,11 @@ To effectively backtest the strategy, we must use the same strategy component du
 
 Run strategy_XYZ.py with argument --backtest to ensure that quoting and trading ports are modified accordingly.
 
+Backtest Data:
+-----
+Backtest data is obtained by using Backtest Manager on VS Code Marketplace by woung717. With that, I am able to download data from various exchanges (e.g. crypto.com, coinext, coinbase, etc) instead of paying for API access from databento, CoinGecko, Kraken.
+
+https://marketplace.visualstudio.com/items?itemName=woung717.backtest-manager
 
 
 ADDITIONAL TOOLS BUILT:
