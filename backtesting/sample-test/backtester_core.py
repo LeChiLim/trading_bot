@@ -17,6 +17,10 @@ TRADE_PORT = 5558
 TRADE_URL = f"tcp://127.0.0.1:{TRADE_PORT}"
 MAX_QUEUE_SIZE = 1000
 
+equity_curve = []  # List to track equity at each trade close
+initial_capital = TEST_TRADE_SIZE_USD * 10  # Assume starting capital
+current_equity = initial_capital
+
 # === Backtest Mode - No real exchange ===
 print("BACKTEST MODE - No real trades executed")
 print(f"Listening on {TRADE_URL} for strategy orders")
@@ -95,7 +99,14 @@ def simulate_execution(order_data):
                 print(f"[{time.strftime('%H:%M:%S')}] ✅ CLOSED {symbol} | P&L: {pnl_pct:+.2f}% (${pnl_usd:+.2f}) | Total: {total_trades_count}")
             else:
                 print(f"[{time.strftime('%H:%M:%S')}] ⚠️  No position to close: {symbol}")
-                
+            
+            global current_equity
+            current_equity += pnl_usd
+            equity_curve.append({
+                'timestamp': timestamp,
+                'equity': current_equity
+            })
+
         print("-" * 60)
         
     except Exception as e:
@@ -145,12 +156,26 @@ print("BACKTEST RESULTS")
 print("="*70)
 
 if len(trades_df) > 0:
+
+    # Create equity DataFrame
+    equity_df = pd.DataFrame(equity_curve)
+    equity_df.set_index('timestamp', inplace=True)
+    
+    # Calculate running peak and drawdown [web:11]
+    equity_df['peak'] = equity_df['equity'].cummax()
+    equity_df['drawdown_pct'] = (equity_df['equity'] - equity_df['peak']) / equity_df['peak'] * 100
+    equity_df['drawdown_usd'] = equity_df['drawdown_pct'] / 100 * initial_capital
+    
+    # Max drawdown metrics
+    max_dd_pct = equity_df['drawdown_pct'].min()
+    max_dd_usd = equity_df['drawdown_usd'].min()
+
     completed_trades = trades_df['pnl_pct']
     winning_trades = completed_trades > 0
     total_trades = len(completed_trades)
     
     # Basic metrics
-    win_rate = len(winning_trades[winning_trades]) / total_trades * 100
+    win_rate = (len(winning_trades[winning_trades]) / total_trades) * 100
     avg_profit_per_trade = completed_trades.mean()
     avg_winner = completed_trades[winning_trades].mean() if len(winning_trades[winning_trades]) > 0 else 0
     avg_loser = completed_trades[~winning_trades].mean() if len(completed_trades[~winning_trades]) > 0 else 0
@@ -163,6 +188,8 @@ if len(trades_df) > 0:
     
     print(f"Total trades:      {total_trades}")
     print(f"Win rate:          {win_rate:.1f}%")
+    print(f"Max drawdown:      {max_dd_pct:.2f}%")
+    print(f"Max drawdown USD:  ${max_dd_usd:.2f}")
     print(f"Avg P&L/trade:     {avg_profit_per_trade:.2f}%")
     print(f"Avg winner:        {avg_winner:.2f}%")
     print(f"Avg loser:         {avg_loser:.2f}%")
