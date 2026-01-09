@@ -77,6 +77,9 @@ DATABASE:
 -----
 I am using PG 18 with Timescale DB to store trade positions from trade.py.
 
+Installation link
+https://www.tigerdata.com/docs/self-hosted/latest/install/installation-docker
+
 
 
 ADDITIONAL TOOLS BUILT:
