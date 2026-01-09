@@ -73,6 +73,12 @@ Backtest data is obtained by using Backtest Manager on VS Code Marketplace by wo
 https://marketplace.visualstudio.com/items?itemName=woung717.backtest-manager
 
 
+DATABASE:
+-----
+I am using PG 18 with Timescale DB to store trade positions from trade.py.
+
+
+
 ADDITIONAL TOOLS BUILT:
 -----
 
