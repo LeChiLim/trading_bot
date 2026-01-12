@@ -1,3 +1,14 @@
 ccxt==4.3.51
 pyzmq==27.1.0
 python-dotenv==1.2.1
+backtesting==0.6.5
+jupyterlab==4.5.0
+backtrader
+vectorbt
+streamlit
+yfinance
+pandas
+numpy 
+datetime
+pandas-ta-classic
+psycopg2-binary
