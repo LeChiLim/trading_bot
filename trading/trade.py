@@ -7,6 +7,8 @@ import os
 import threading
 from queue import Queue
 from collections import deque
+import psycopg2
+from database import insert_trade
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -19,6 +21,22 @@ TRADE_PORT = 5001  # Port for receiving trade orders from strategies
 TRADE_URL = f"tcp://127.0.0.1:{TRADE_PORT}"
 MAX_QUEUE_SIZE = 1000  # Maximum orders in queue
 # ==================
+
+DB_NAME = os.getenv('DB_NAME')
+DB_USER = os.getenv('DB_USER')
+DB_PASS = os.getenv('DB_PASS')
+DB_HOST = os.getenv('DB_HOST')
+DB_PORT = os.getenv('DB_PORT')
+
+try:
+    conn = psycopg2.connect(database=DB_NAME,
+                            user=DB_USER,
+                            password=DB_PASS,
+                            host=DB_HOST,
+                            port=DB_PORT)
+    print("Database connected successfully")
+except:
+    print("Database not connected successfully")
 
 # Binance with API keys
 # exchange = ccxt.binance({
@@ -94,15 +112,19 @@ def execute_order(order_data):
         trade_record = {
             'timestamp': time.time(),
             'order_id': order['id'],
-            'order_type': order_type,
+            'order_type': "MARKET",  #'MARKET', 'LIMIT', etc.
             'symbol': symbol,
             'price': price,
-            'amount': amount,
-            'strategy_name': strategy_name,
-            'status': order.get('status', 'unknown')
+            'order_size': amount,
+            'side': order_type, #buy or sell
+            'fee': order.get('fee', {}),
+            'exchange': 'binance',
+            'status': order.get('status', 'unknown'),
+            'strategy_name': strategy_name
         }
         
         trade_records.append(trade_record)
+        trade_record_db = insert_trade(conn, trade_record)
         total_trades_count += 1
         
         print(f"  Order ID: {order['id']}")
