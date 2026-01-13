@@ -2,6 +2,6 @@ QUOTING PORTS
 ==============
 
 5001    Binance
-5002    Crypto.co
+5002    Crypto.com
 5003    Kraken
 5004    KuCoin
