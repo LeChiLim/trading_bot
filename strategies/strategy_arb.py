@@ -114,7 +114,7 @@ def run_strategy():
             best_bid_exchange = max(bids, key=bids.get)
             #print(f"Best Ask: {best_ask_exchange} at {asks[best_ask_exchange]:.2f}, Best Bid: {best_bid_exchange} at {bids[best_bid_exchange]:.2f}")
 
-            if bids[best_bid_exchange] < asks[best_ask_exchange]:
+            if bids[best_bid_exchange] > asks[best_ask_exchange]:
                 # Arbitrage opportunity detected
                 print(f"Arbitrage Opportunity: Buy on {best_ask_exchange} at {asks[best_ask_exchange]} and Sell on {best_bid_exchange} at {bids[best_bid_exchange]}")
                 # Send BUY order to best ask exchange
