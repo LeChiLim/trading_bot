@@ -11,7 +11,7 @@ PORT = 5002
 URL = f"tcp://{HOST}:{PORT}"
 
 # Initialize cryptocom (public data only)
-exchange = ccxt.cryptocoms({
+exchange = ccxt.cryptocom({
     'enableRateLimit': True,  # Be nice to the API
 })
 
